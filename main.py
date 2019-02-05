@@ -28,7 +28,7 @@ def good_password(password):
     password = request.form['password']
 
     if (len(password) > 3 and len(password) < 20):
-        if not password.contains(" "):
+        if (" ") in password:
             return True
     else:
         return False 
@@ -46,7 +46,7 @@ def good_email(email):
 
     email = request.form['email']
     if email != '':
-        if email.match("[^@]+@[^@]+\.[^@]+", email):
+        if ("[^@]+@[^@]+.[^@]+"):
             return True
         else:
             return False
@@ -59,44 +59,44 @@ def validate_form():
     verify = request.form['verify']
     email = request.form['email']
 
-    #username_error = ''
+    username_error = ''
     password_error = ''
     verify_error = ''
     email_error=''
 
     if good_username(username) == False:
         username_error = 'That is not a valid username.'
-        #username = ''
+        username = ''
 
-    if good_password(password) != True:
+    if good_password(password) == False:
         password_error = 'That is not a valid password.'
         password = ''
 
-    if password_match(verify) != True:
+    if password_match(verify) == False:
         verify_error = 'Passwords do not match.'
         verify = ''
 
-    if good_email(email) != True:
+    if good_email(email) == False:
         email_error = 'That is not a valid email address.'
         email = ''
 
-   # if not username_error and not password_error and not verify_error and not email_error:
-    if username_error:
-        return redirect('/welcome?username'.format(username))
+    if not username_error and not password_error and not verify_error and not email_error:
+    #if username_error:
+        return redirect('/welcome?username=' + username)
     else:
         template = jinja_env.get_template('index.html')
-        return template.render(username_error = username_error, password_error = password_error, 
-            verify_error = verify_error, email_error = email_error,
+        return template.render(username_error=username_error, password_error=password_error, 
+            verify_error=verify_error, email_error=email_error,
             username = username,
             password = '',
             verify = '',
             email = email)
 
-@app.route('/welcome', methods=['POST'])
+@app.route('/welcome')
 def welcome():
-    username = request.form['username']
-    template = jinja_env.get_template('welcome.html')
-    return template.render(username=username)
+    username = request.args.get('username')
+
+    return render_template('welcome.html', username=username)
 
 if __name__ == "__main__":
     app.run()
