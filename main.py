@@ -16,7 +16,6 @@ def index():
     template = jinja_env.get_template('index.html')
     return template.render()         
 
-@app.route("/good_username", methods=["POST"])
 def good_username(username):
     username = request.form['username']
 
@@ -25,7 +24,6 @@ def good_username(username):
     else:
         return False
 
-@app.route("/good_password", methods=["POST"])
 def good_password(password):
     password = request.form['password']
 
@@ -35,7 +33,6 @@ def good_password(password):
     else:
         return False 
 
-@app.route("/verify_password", methods=["POST"])
 def password_match(verify):
     verify = request.form['verify']
     password = request.form['password']
@@ -45,7 +42,6 @@ def password_match(verify):
     else:
         return False
 
-@app.route("/good_email")
 def good_email(email):
 
     email = request.form['email']
@@ -63,14 +59,14 @@ def validate_form():
     verify = request.form['verify']
     email = request.form['email']
 
-    username_error = ''
+    #username_error = ''
     password_error = ''
     verify_error = ''
     email_error=''
 
-    if good_username(username) != True:
+    if good_username(username) == False:
         username_error = 'That is not a valid username.'
-        username = ''
+        #username = ''
 
     if good_password(password) != True:
         password_error = 'That is not a valid password.'
@@ -84,7 +80,8 @@ def validate_form():
         email_error = 'That is not a valid email address.'
         email = ''
 
-    if not username_error and not password_error and not verify_error and not email_error:
+   # if not username_error and not password_error and not verify_error and not email_error:
+    if username_error:
         return redirect('/welcome?username'.format(username))
     else:
         template = jinja_env.get_template('index.html')
