@@ -81,7 +81,6 @@ def validate_form():
         email = ''
 
     if not username_error and not password_error and not verify_error and not email_error:
-    #if username_error:
         return redirect('/welcome?username=' + username)
     else:
         template = jinja_env.get_template('index.html')
